@@ -87,7 +87,8 @@ func (vi *videoInformation) getVideoInformation(URL string) error {
 	if err := json.Unmarshal([]byte(playerResponse[0]), &player); err != nil {
 		return errors.Wrap(err, "unable to extract player response")
 	}
-	vi.name = player.VideoDetails.Title
+	// avoid to have / character for saving file
+	vi.name = strings.Replace(player.VideoDetails.Title, "/", "-", -1)
 
 	for _, f := range player.StreamingData.Formats {
 		if strings.Contains(f.MimeType, "audio/mp4") {
